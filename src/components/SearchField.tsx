@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { of, Observable, observable } from "rxjs";
+import { of, Observable } from "rxjs";
 import { TextField, CircularProgress } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
@@ -11,10 +11,10 @@ interface ISearchFiealProps {
 }
 
 const SearchField: React.FC<ISearchFiealProps> = ({ onChange, onSelect, companies, isLoading }) => {
-    const handlehEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const subject$ = new Observable<any>(observable => observable.next(event.target.value))
-        onChange(subject$)
-    }
+    // const handlehEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const subject$ = new Observable<string>(observable => observable.next(event.target.value))
+    //     onChange(subject$)
+    // }
 
     return (
         <Autocomplete
@@ -31,7 +31,7 @@ const SearchField: React.FC<ISearchFiealProps> = ({ onChange, onSelect, companie
                     margin="normal"
                     fullWidth
                     label="Введите название компании"
-                    onChange={handlehEvent}
+                    onChange={onChange}
                     InputProps={{ ...params.InputProps }}
                 />)}
             renderOption={(option: TSearchCompany) => {

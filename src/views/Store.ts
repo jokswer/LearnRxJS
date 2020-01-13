@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import { of, Subject } from "rxjs";
+import { of, Subject, Observable } from "rxjs";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -11,6 +11,8 @@ import {
 import request$ from "../services/http";
 
 class MainStore {
+  private value = new Subject<string>()
+
   @observable
   public companiesIsloading = false;
 
@@ -21,11 +23,12 @@ class MainStore {
   public companyProfile: TCompanyProfile | undefined;
 
   @action
-  public handleSearchEvent = (event: any) => {
-    event
+  public handleSearchEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.value.next(event.currentTarget.value)
+    this.value.asObservable()
       .pipe(
         // map(event => event.currentTarget.value),
-        debounceTime(5000),
+        debounceTime(500),
         tap((e)=> console.log(e)),
         // distinctUntilChanged(),
         tap(() => (this.companiesIsloading = true)),
