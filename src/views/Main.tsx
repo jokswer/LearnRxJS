@@ -11,13 +11,21 @@ interface IMainScreenProps {
 @inject('mainStore')
 @observer
 class MainScreen extends React.Component<IMainScreenProps> {
+    componentDidMount(){
+        this.props.mainStore?.subscribeSearch();
+    }
+
+    componentWillUnmount(){
+        this.props.mainStore?.unsubscribeSearch();
+    }
+
     render() {
         const {
             companies,
             receiveCompanyProfile,
             companyProfile,
             handleSearchEvent,
-            companiesIsloading
+            companiesIsloading,
         } = this.props.mainStore!
 
         return (

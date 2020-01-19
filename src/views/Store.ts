@@ -1,17 +1,15 @@
 import { observable, action } from "mobx";
-import { of, Subject, Observable } from "rxjs";
+import { Subject } from "rxjs";
 import {
   debounceTime,
   distinctUntilChanged,
-  map,
   tap,
   switchMap,
-  share
 } from "rxjs/operators";
 import request$ from "../services/http";
 
 class MainStore {
-  private value = new Subject<string>()
+  value = new Subject<string>()
 
   @observable
   public companiesIsloading = false;
@@ -22,21 +20,25 @@ class MainStore {
   @observable
   public companyProfile: TCompanyProfile | undefined;
 
-  @action
   public handleSearchEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.value.next(event.currentTarget.value)
-    this.value.asObservable()
+    this.value.next(event.target.value)
+  }
+
+  public subscribeSearch = () => {
+    this.value
       .pipe(
-        // map(event => event.currentTarget.value),
         debounceTime(500),
-        tap((e)=> console.log(e)),
-        // distinctUntilChanged(),
+        distinctUntilChanged(),
         tap(() => (this.companiesIsloading = true)),
         switchMap((value: string) => this.searchCompany(value)),
         tap(() => (this.companiesIsloading = false))
       )
-      .subscribe((result: any) => (this.companies = result));
+      .subscribe((result: TSearchCompany[]) => (this.companies = result));
   };
+
+  public unsubscribeSearch = () => {
+    this.value.unsubscribe()
+  }
 
   @action
   private searchCompany = (name: string) => {

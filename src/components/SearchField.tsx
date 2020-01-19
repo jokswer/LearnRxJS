@@ -1,21 +1,15 @@
 import * as React from 'react';
-import { of, Observable } from "rxjs";
 import { TextField, CircularProgress } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
 interface ISearchFiealProps {
-    onChange: (event: any) => void;
+    onChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
     onSelect: (text: string) => void;
     companies: TSearchCompany[];
     isLoading: boolean;
 }
 
 const SearchField: React.FC<ISearchFiealProps> = ({ onChange, onSelect, companies, isLoading }) => {
-    // const handlehEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const subject$ = new Observable<string>(observable => observable.next(event.target.value))
-    //     onChange(subject$)
-    // }
-
     return (
         <Autocomplete
             freeSolo
